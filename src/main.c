@@ -28,6 +28,7 @@ int main() {
 
     Shader shader = shader_create("res/shader/shader.vert", "res/shader/shader.frag");
     Shader shader2 = shader_create("res/shader/shader.vert", "res/shader/shader2.frag");
+    Shader shader3 = shader_create("res/shader/shader.vert", "res/shader/shader3.frag");
 
     float vertices[] = {
          1.f,  1.f, 0.0f,
@@ -95,6 +96,12 @@ int main() {
                 shader_uniform_vec2(shader2, "u_mouse", u_mouse);
                 shader_uniform_int(shader2, "u_twist", twist);
                 shader_uniform_int(shader2, "u_taper", tape);
+                break;
+            case 2:
+                shader_use(shader3);
+                shader_uniform_float(shader3, "u_time", current_frame);
+                shader_uniform_vec2(shader3, "u_resolution", u_resolution);
+                shader_uniform_vec2(shader3, "u_mouse", u_mouse);
                 break;
         }
         
