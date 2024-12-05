@@ -88,6 +88,7 @@ int main() {
                 shader_uniform_float(shader, "u_time", current_frame);
                 shader_uniform_vec2(shader, "u_resolution", u_resolution);
                 shader_uniform_vec2(shader, "u_mouse", u_mouse);
+                shader_uniform_int(shader, "u_twist", twist);
                 break;
             case 1:
                 shader_use(shader2);

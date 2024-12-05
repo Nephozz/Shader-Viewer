@@ -34,7 +34,7 @@ vec2 map(vec3 p) {
 
     int nb_iter = 0;
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 20; i++) {
         nb_iter = i;
         wr = length(w);
         if (wr > 2.) break;
@@ -58,6 +58,15 @@ vec2 map(vec3 p) {
     float dist = 0.5 * log(wr) * wr / dr;
 
     return vec2(dist, float(nb_iter));
+}
+
+vec3 palette( in float t)
+{
+    vec3 a = vec3(1.0, 0.0, 0.0);
+    vec3 b = vec3(1.0, 0.0, 0.8667);
+    vec3 c = vec3(0.6667, 0.0, 1.0);
+    vec3 d = vec3(0.);
+    return a + b*cos( 2*PI*(c*t+d) );
 }
 
 vec2 rayMarch(vec3 ray_origin, vec3 ray_direction) {
@@ -90,8 +99,8 @@ vec3 getLight(vec3 p, vec3 rd, vec3 color) {
     vec3 V = -rd;
     vec3 R = reflect(-L, N);
 
-    vec3 spec_color = vec3(.5);
-    vec3 specular = spec_color * pow(clamp(dot(R, V), 0., 1.), 10.);
+    // vec3 spec_color = vec3(.5);
+    // vec3 specular = spec_color * pow(clamp(dot(R, V), 0., 1.), 10.);
     vec3 diffuse = color * clamp(dot(L, N), 0., 1.);
     vec3 ambient = color * .05;
 
@@ -99,7 +108,7 @@ vec3 getLight(vec3 p, vec3 rd, vec3 color) {
     float d = rayMarch(p + N * .02, normalize(lightPos)).x;
     if (d < length(lightPos - p)) return ambient;
 
-    return diffuse;
+    return diffuse + ambient;
 }
 
 mat3 getCam(vec3 ro, vec3 lookAt) {
@@ -111,7 +120,8 @@ mat3 getCam(vec3 ro, vec3 lookAt) {
 }
 
 void render(inout vec3 col, in vec2 uv) {
-    vec3 ro = vec3(0., 0.,-1.5);
+    float t = u_time * .1;
+    vec3 ro = vec3(sin(t), cos(t), 0.8 + 0.4 * sin(t));
     vec3 lookAt = vec3(0,0,0);
     vec3 rd = getCam(ro, lookAt) * normalize(vec3(uv, FOV));
 
@@ -121,8 +131,15 @@ void render(inout vec3 col, in vec2 uv) {
     if (object.x < MAX_DIST) {
         vec3 p = ro + object.x * rd;
         // display a non linear gradient based on the number of iterations
-        float c = object.y / 16;
-        col = mix(vec3(c), vec3(0.), exp(c));   
+        float c = clamp(exp(- 0.11*object.y), 0., 1.);
+
+        vec3 emission = palette(c);
+
+        // Darken the color based on the number of iterations
+        float darkenFactor = clamp(object.y / 26.0, 0.0, 1.0);
+        vec3 darkenedColor = mix(vec3(0.0), emission, darkenFactor);
+
+        col = darkenedColor;   
 
     } else {
         col += background;

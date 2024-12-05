@@ -7,6 +7,7 @@ precision mediump float;
 uniform vec2 u_resolution;
 uniform float u_time;
 uniform vec2 u_mouse;
+uniform bool u_twist;
 
 const float FOV = 1.;
 const int MAX_STEPS = 256;
@@ -63,9 +64,16 @@ vec4 map(vec3 p) {
     vec3 torus_color = vec3(0., .9, 0.);
     vec4 torus = vec4(torus_dist, torus_color);
 
-    vec4 obj = fOpBlobbyID(box, sphere, .4);
+    vec4 obj;
 
-    obj = fOpBlobbyID(obj, torus, .4);
+    if (u_twist) {
+        obj = fOpBlobbyID(box, sphere, .4);
+        obj = fOpBlobbyID(obj, torus, .4);
+    } else {
+        obj = fOpUnionID(box, sphere);
+        obj = fOpUnionID(obj, torus);
+    }
+    
 
     vec4 res = fOpUnionID(obj, plane);
 
