@@ -16,6 +16,8 @@ float last_frame = 0.f;
 
 vec2 u_resolution = {SCR_WIDTH, SCR_HEIGHT};
 
+int selected_shader = 0;
+
 int main() {
     
     GLFWwindow* window = window_create();
@@ -25,6 +27,7 @@ int main() {
     }
 
     Shader shader = shader_create("res/shader/shader.vert", "res/shader/shader.frag");
+    Shader shader2 = shader_create("res/shader/shader.vert", "res/shader/shader2.frag");
 
     float vertices[] = {
          1.f,  1.f, 0.0f,
@@ -57,6 +60,12 @@ int main() {
     wireframe = false;
     z_pressed = false;
 
+    twist = false;
+    t_pressed = false;
+
+    tape = false;
+    f_pressed = false;
+
     first_mouse = true;
     last_x = (float)SCR_WIDTH / 2.;
     last_y = (float)SCR_HEIGHT / 2.;
@@ -67,15 +76,27 @@ int main() {
         last_frame = current_frame;
         vec2 u_mouse = {last_x, last_y}; 
 
-        processInput(window, &camera, delta_time);
+        processInput(window, &camera, delta_time, &selected_shader);
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        shader_use(shader);
-        shader_uniform_float(shader, "u_time", current_frame);
-        shader_uniform_vec2(shader, "u_resolution", u_resolution);
-        shader_uniform_vec2(shader, "u_mouse", u_mouse);
+        switch (selected_shader) {
+            case 0:
+                shader_use(shader);
+                shader_uniform_float(shader, "u_time", current_frame);
+                shader_uniform_vec2(shader, "u_resolution", u_resolution);
+                shader_uniform_vec2(shader, "u_mouse", u_mouse);
+                break;
+            case 1:
+                shader_use(shader2);
+                shader_uniform_float(shader2, "u_time", current_frame);
+                shader_uniform_vec2(shader2, "u_resolution", u_resolution);
+                shader_uniform_vec2(shader2, "u_mouse", u_mouse);
+                shader_uniform_int(shader2, "u_twist", twist);
+                shader_uniform_int(shader2, "u_taper", tape);
+                break;
+        }
         
         mat4 view;
         get_view_matrix(&camera, view);

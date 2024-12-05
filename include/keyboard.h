@@ -7,8 +7,13 @@
 #include "gfx/camera.h"
 
 extern bool wireframe;
-extern bool z_pressed;
+extern bool twist;
+extern bool tape;
 
-void processInput(GLFWwindow *window, Camera *camera, float delta_time);
+extern bool z_pressed;
+extern bool t_pressed;
+extern bool f_pressed;
+
+void processInput(GLFWwindow *window, Camera *camera, float delta_time, int *selected_shader);
 
 #endif

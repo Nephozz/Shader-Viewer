@@ -8,6 +8,9 @@ uniform vec2 u_resolution;
 uniform float u_time;
 uniform vec2 u_mouse;
 
+uniform bool u_twist;
+uniform bool u_taper;
+
 const float FOV = 1.;
 const int MAX_STEPS = 256;
 const float MAX_DIST = 500;
@@ -91,9 +94,11 @@ vec4 map(vec3 p) {
 
     vec3 q = p;
 
-    q = taper(q, 1.5, .5);
+    if (u_taper)
+        q = taper(q, 1.5, .5);
 
-    // q = twist(q, sin(u_time));
+    if (u_twist)
+        q = twist(q, sin(u_time));
 
     float box_dist = sdBox(q * scale, vec3(1.)) / scale;
     vec3 box_color = vec3(.9, 0.4, 0.);
