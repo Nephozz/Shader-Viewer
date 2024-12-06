@@ -130,16 +130,17 @@ void render(inout vec3 col, in vec2 uv) {
     vec3 background = vec3(0.);
     if (object.x < MAX_DIST) {
         vec3 p = ro + object.x * rd;
-        // display a non linear gradient based on the number of iterations
         float c = clamp(exp(- 0.11*object.y), 0., 1.);
 
         vec3 emission = palette(c);
 
-        // Darken the color based on the number of iterations
         float darkenFactor = clamp(object.y / 26.0, 0.0, 1.0);
         vec3 darkenedColor = mix(vec3(0.0), emission, darkenFactor);
 
-        col = darkenedColor;   
+        float glow = exp(-object.x * 0.01);
+        vec3 glowColor = emission * glow;
+
+        col = darkenedColor + 0.01 * glowColor;  
 
     } else {
         col += background;

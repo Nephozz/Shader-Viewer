@@ -40,6 +40,11 @@ void processInput(GLFWwindow *window, Camera *camera, float delta_time, int *sel
             *selected_shader = 2;
         }
     }
+    if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
+        if (*selected_shader != 3) {
+            *selected_shader = 3;
+        }
+    }
 
     if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) {
         if (!z_pressed) {
