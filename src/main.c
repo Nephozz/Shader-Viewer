@@ -26,10 +26,10 @@ int main() {
         return EXIT_FAILURE;
     }
 
-    Shader shader = shader_create("res/shader/shader.vert", "res/shader/example1.frag");
-    Shader shader2 = shader_create("res/shader/shader.vert", "res/shader/example2.frag");
-    Shader shader3 = shader_create("res/shader/shader.vert", "res/shader/example3.frag");
-    Shader shader4 = shader_create("res/shader/shader.vert", "res/shader/example4.frag");
+    Shader shader = shader_create("res/shader/shader.vert", "res/shader/star_pal.frag");
+    Shader shader2 = shader_create("res/shader/shader.vert", "res/shader/star.frag");
+    Shader shader3 = shader_create("res/shader/shader.vert", "res/shader/test.frag");
+    Shader shader4 = shader_create("res/shader/shader.vert", "res/shader/shape.frag");
 
     float vertices[] = {
          1.f,  1.f, 0.0f,
