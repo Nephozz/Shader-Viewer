@@ -2,4 +2,9 @@
 *.log
 *.o
 
+*.a
+*.dll
+
+bin/
+
 .vscode/
